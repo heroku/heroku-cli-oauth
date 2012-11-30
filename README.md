@@ -1,4 +1,9 @@
-= Heroku OAuth command line plugin
+= Heroku OAuth
+
+Command line plugin giving you commands to manage OAuth clients, authorizations and tokens.
+
+
+=== Clients
 
 To create a client:
 
@@ -23,3 +28,23 @@ Update clients:
 $ heroku clients:update 66c0743078a45bda1ace505a --url https://amazing.herokuapp.com/callback
 Updated client Amazing
 ```
+
+
+=== Authorizations
+
+List them:
+
+```
+$ heroku authorizations
+=== Authorizations
+authorization14@heroku.com  Amazing      all
+authorization15@heroku.com  Another App  read-only
+```
+
+And revoke an authorization at anytime:
+
+```
+$ heroku authorizations:revoke authorization15@heroku.com
+Revoked authorization to Another App
+```
+
