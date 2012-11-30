@@ -63,7 +63,6 @@ class Heroku::Command::Clients < Heroku::Command::Base
   def destroy
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:destroy [ID]")
     client = json_decode(heroku.delete("/oauth/clients/#{id}"))
-    puts client.inspect
     puts "Deleted client #{client["name"]}"
   end
 

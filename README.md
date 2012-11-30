@@ -45,6 +45,42 @@ And revoke an authorization at anytime:
 
 ```
 $ heroku authorizations:revoke authorization15@heroku.com
-Revoked authorization to Another App
+Revoked authorization from Another App
 ```
 
+=== Tokens
+
+You can also use OAuth to get a unique key to access your account:
+
+```
+$ heroku tokens:create
+Created OAuth token
+  Scope:   all
+  Access:  4cee516c-f8c6-4f14-9edf-fc6ef09cedc5
+  Refresh: fc63e5c3-6a2a-46e0-a9ff-6df0df3a68de
+  Expires: 7199
+```
+
+Then just use it like a password:
+
+```
+curl -u ":4cee516c-f8c6-4f14-9edf-fc6ef09cedc5" https://api.heroku.com/apps
+```
+
+You can also get more limited tokens (EXPERIMENTAL!):
+
+```
+$ heroku tokens:create --scope app:app2@heroku.com
+Created OAuth token
+  Scope:   app2@heroku.com
+  Access:  b2a5b696-f0a0-4cb8-8184-27c319d8d9e3
+  Refresh: 5c376a70-1291-4d49-b183-54b9c44bd6ef
+  Expires: 7199
+```
+
+And then you can't use this token to access other apps:
+
+```
+curl -u ":4cee516c-f8c6-4f14-9edf-fc6ef09cedc5" https://api.heroku.com/apps/1@heroku.com
+{"error":"The scope of this OAuth authorization does not allow access to this resource"}
+```
