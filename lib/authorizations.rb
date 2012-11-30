@@ -20,6 +20,6 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   def revoke
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:destroy [ID] [options]")
     auth = json_decode(heroku.delete("/oauth/authorizations/#{id}"))
-    puts "Revoked authorization to #{auth["client"]["name"]}"
+    puts "Revoked authorization from #{auth["client"]["name"]}"
   end
 end
