@@ -1,9 +1,9 @@
-= Heroku OAuth
+# Heroku OAuth
 
 Command line plugin giving you commands to manage OAuth clients, authorizations and tokens.
 
 
-=== Clients
+### Clients
 
 To create a client:
 
@@ -30,7 +30,7 @@ Updated client Amazing
 ```
 
 
-=== Authorizations
+### Authorizations
 
 List them:
 
@@ -48,7 +48,7 @@ $ heroku authorizations:revoke authorization15@heroku.com
 Revoked authorization from Another App
 ```
 
-=== Tokens
+### Tokens
 
 You can also use OAuth to get a unique key to access your account:
 
