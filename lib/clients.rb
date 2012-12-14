@@ -50,6 +50,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
     end
 
     validate!(options[:url]) if options[:url]
+    options[:redirect_uri] = options.delete(:url)
 
     raw = heroku.put("/oauth/clients/#{id}", :client => options)
     client = json_decode(raw)
