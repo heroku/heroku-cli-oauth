@@ -84,7 +84,7 @@ curl -u ":b2a5b696-f0a0-4cb8-8184-27c319d8d9e3" https://api.heroku.com/apps/1@he
 
 #### Revoking
 
-Any authorization on your account can be revoked any time:
+Any authorization on your account can be revoked at any time:
 
 ``` bash
 $ heroku authorizations:revoke authorization15@heroku.com
