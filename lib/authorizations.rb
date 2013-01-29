@@ -25,8 +25,8 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
     puts "Created OAuth authorization"
     puts "  ID:          #{token["id"]}"
     puts "  Description: #{token["description"]}"
-    puts "  Scope:       #{token["scopes"]}"
-    puts "  Token:       #{token["tokens"][0]["access_token"]}"
+    puts "  Scope:       #{token["scopes"].join(", ")}"
+    puts "  Token:       #{token["access_tokens"][0]["token"]}"
   end
 
   # authorizations:revoke [ID]
@@ -34,7 +34,7 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   # Revoke authorization
   #
   def revoke
-    id = shift_argument ||raise(Heroku::Command::CommandFailed, "Usage: authorizations:revoke [ID] [options]")
+    id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: authorizations:revoke [ID] [options]")
     auth = json_decode(heroku.delete("/oauth/authorizations/#{CGI.escape(id)}"))
     puts "Revoked authorization from '#{auth["description"]}'"
   end
