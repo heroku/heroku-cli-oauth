@@ -9,7 +9,7 @@ class Heroku::Command::Sessions < Heroku::Command::Base
     sessions = json_decode(heroku.get("/oauth/sessions"))
     styled_header("OAuth Sessions")
     styled_array(sessions.map { |session|
-      [session["id"], session["description"]]
+      [session["description"], session["id"]]
     })
   end
 
