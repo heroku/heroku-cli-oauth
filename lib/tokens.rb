@@ -38,6 +38,6 @@ class Heroku::Command::Tokens < Heroku::Command::Base
     return "long-lived" if expires_in.nil?
     return "expired"    if expires_in < 0
     expires_at = Time.now + expires_in
-    return "expires at #{expires_at.iso8601}"
+    expires_at.iso8601
   end
 end
