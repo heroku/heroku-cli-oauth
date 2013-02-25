@@ -71,11 +71,18 @@ class Heroku::Command::Clients < Heroku::Command::Base
 
   def validate!(url)
     uri = URI.parse(url)
-    if uri.scheme != "https" && uri.host != "localhost"
+    if insecure_url?(uri)
       raise(Heroku::Command::CommandFailed, "Unsupported callback URL. Clients have to use HTTPS")
     end
   rescue URI::InvalidURIError
     raise(Heroku::Command::CommandFailed, "Invalid callback URL. Make sure it's a valid, HTTPS URL")
   end
 
+  def insecure_url?(uri)
+    return false if uri.scheme == "https"
+    return false if uri.host == "localhost"
+    # allow 10.* and 192.* clients for testing
+    return false if uri.host.nil? && uri.path =~ /\A(10\.|192\.)/
+    true
+  end
 end
