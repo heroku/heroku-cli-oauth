@@ -80,9 +80,9 @@ class Heroku::Command::Clients < Heroku::Command::Base
 
   def insecure_url?(uri)
     return false if uri.scheme == "https"
+    # allow localhost, 10.* and 192.* clients for testing
     return false if uri.host == "localhost"
-    # allow 10.* and 192.* clients for testing
-    return false if uri.host.nil? && uri.path =~ /\A(10\.|192\.)/
+    return false if uri.host =~ /\A(10\.|192\.)/
     true
   end
 end
