@@ -9,7 +9,7 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
     authorizations = json_decode(heroku.get("/oauth/authorizations"))
     styled_header("Authorizations")
     styled_array(authorizations.map do |auth|
-      [auth["description"], auth["id"], auth["scopes"].join(", ")]
+      [auth["description"] || "", auth["id"], auth["scopes"].join(", ")]
     end)
   end
 
