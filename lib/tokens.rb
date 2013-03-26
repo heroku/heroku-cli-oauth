@@ -7,7 +7,8 @@ class Heroku::Command::Tokens < Heroku::Command::Base
   #
   def index
     tokens = []
-    json_decode(heroku.get("/oauth/authorizations")).each do |auth|
+    json_decode(heroku.get("/oauth/authorizations",
+      :accept => "application/vnd.heroku+json; version=3")).each do |auth|
       %w( access_tokens refresh_tokens ).each do |type|
         auth[type].each do |token|
           client = auth["client"] || {}
@@ -20,9 +21,11 @@ class Heroku::Command::Tokens < Heroku::Command::Base
         end
       end
     end
+    p tokens
 
     # sort by title, type, expires_in
-    tokens.sort_by! { |token| "#{token["title"]} #{token["type"]} #{token["expires_in"]}" }
+    tokens.sort! { |a, b| "#{a["title"]} #{a["type"]} #{a["expires_in"]}" <=>
+      "#{b["title"]} #{b["type"]} #{b["expires_in"]}" }
 
     columns = %w( title authorization type expiration )
     display_table(
