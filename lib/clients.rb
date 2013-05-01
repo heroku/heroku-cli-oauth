@@ -52,9 +52,14 @@ class Heroku::Command::Clients < Heroku::Command::Base
     validate!(options[:url]) if options[:url]
     options[:redirect_uri] = options.delete(:url)
 
-    raw = heroku.put("/oauth/clients/#{id}", options,
-      { :accept => "application/vnd.heroku+json; version=3" })
-    client = json_decode(raw)
+    raw = api.request(
+      :expects => 200,
+      :method  => :patch,
+      :path    => "/oauth/clients/#{id}",
+      :query   => options,
+      :headers => { "Accept" => "application/vnd.heroku+json; version=3" })
+
+    client = raw.body
     puts "Updated client #{client["name"]}"
   end
 
