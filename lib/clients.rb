@@ -30,9 +30,9 @@ class Heroku::Command::Clients < Heroku::Command::Base
       { :name => name, :redirect_uri => url },
       { :accept => "application/vnd.heroku+json; version=3" })
     client = json_decode(raw)
-    puts "Created client #{name}"
-    puts "  ID:     #{client["id"]}"
-    puts "  Secret: #{client["secret"]}"
+    puts
+    puts "HEROKU_KEY=#{client["id"]}"
+    puts "HEROKU_SECRET=#{client["secret"]}"
   end
 
   # clients:update [ID]
