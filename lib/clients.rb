@@ -16,6 +16,8 @@ class Heroku::Command::Clients < Heroku::Command::Base
   #
   # create a new OAuth client
   #
+  # -s, --shell  # output config vars in shell format
+  #
   def create
     name = shift_argument
     url  = shift_argument
@@ -30,9 +32,15 @@ class Heroku::Command::Clients < Heroku::Command::Base
       { :name => name, :redirect_uri => url },
       { :accept => "application/vnd.heroku+json; version=3" })
     client = json_decode(raw)
-    puts
-    puts "HEROKU_KEY=#{client["id"]}"
-    puts "HEROKU_SECRET=#{client["secret"]}"
+
+    if options[:shell]
+      puts
+      puts "HEROKU_KEY=#{client["id"]}"
+      puts "HEROKU_SECRET=#{client["secret"]}"
+    else
+      styled_header("Created client #{name}")
+      styled_hash(client)
+    end
   end
 
   # clients:update [ID]
