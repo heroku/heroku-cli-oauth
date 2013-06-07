@@ -14,9 +14,20 @@ To create a client:
 
 ``` bash
 $ heroku clients:create Amazing https://amazing-client.herokuapp.com/auth/heroku/callback
+
 Created client Amazing
   ID:     66c0743078a45bda1ace505a
   Secret: 3a791be75df30f2b87bd0a8aff1528ec2441d546407b71a2
+```
+
+Or use the `-s / --shell` option to pipe output straight to your `.env` file:
+
+``` bash
+$ heroku clients:create -s Amazing https://amazing-client.herokuapp.com/auth/heroku/callback >> .env
+$ cat .env
+...
+HEROKU_KEY=66c0743078a45bda1ace505a
+HEROKU_SECRET=3a791be75df30f2b87bd0a8aff1528ec2441d546407b71a2
 ```
 
 See OAuth clients under your account with:
