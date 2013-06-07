@@ -7,8 +7,7 @@ class Heroku::Command::Tokens < Heroku::Command::Base
   #
   def index
     tokens = []
-    json_decode(heroku.get("/oauth/authorizations",
-      :accept => "application/vnd.heroku+json; version=3")).each do |auth|
+    json_decode(heroku.get("/oauth/authorizations")).each do |auth|
       %w( access_tokens refresh_tokens ).each do |type|
         auth[type].each do |token|
           client = auth["client"] || {}

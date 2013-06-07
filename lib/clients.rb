@@ -6,8 +6,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
   # List clients under your account
   #
   def index
-    clients = json_decode(heroku.get("/oauth/clients",
-      :accept => "application/vnd.heroku+json; version=3"))
+    clients = json_decode(heroku.get("/oauth/clients"))
     styled_header("OAuth Clients")
     styled_array(clients.map { |client| [client["name"], client["id"], client["redirect_uri"]] })
   end
@@ -27,8 +26,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
     validate!(url)
 
     raw = heroku.post("/oauth/clients",
-      { :name => name, :redirect_uri => url },
-      { :accept => "application/vnd.heroku+json; version=3" })
+      { :name => name, :redirect_uri => url })
     client = json_decode(raw)
     puts "Created client #{name}"
     puts "  ID:     #{client["id"]}"
@@ -56,8 +54,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
       :expects => 200,
       :method  => :patch,
       :path    => "/oauth/clients/#{id}",
-      :query   => options,
-      :headers => { "Accept" => "application/vnd.heroku+json; version=3" })
+      :query   => options)
 
     client = raw.body
     puts "Updated client #{client["name"]}"
@@ -69,8 +66,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
   #
   def destroy
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:destroy [ID]")
-    client = json_decode(heroku.delete("/oauth/clients/#{id}",
-      :accept => "application/vnd.heroku+json; version=3" ))
+    client = json_decode(heroku.delete("/oauth/clients/#{id}"))
     puts "Deleted client #{client["name"]}"
   end
 
