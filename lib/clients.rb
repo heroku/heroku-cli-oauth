@@ -62,7 +62,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
       puts "HEROKU_KEY=#{client["id"]}"
       puts "HEROKU_SECRET=#{client["secret"]}"
     else
-      styled_header("Client #{client['name']}")
+      styled_header("Client #{client["name"]}")
       styled_hash(client)
     end
   end
