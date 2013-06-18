@@ -41,6 +41,32 @@ class Heroku::Command::Clients < Heroku::Command::Base
     end
   end
 
+  # clients:show [ID]
+  #
+  # show details for an OAuth client
+  #
+  # -s, --shell # output config vars in shell format
+  #
+  def show
+    id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:show [ID]")
+
+    raw = api.request(
+      :expects => 200,
+      :method  => :get,
+      :path    => "/oauth/clients/#{id}")
+
+    client = raw.body
+
+    if options[:shell]
+      puts
+      puts "HEROKU_KEY=#{client["id"]}"
+      puts "HEROKU_SECRET=#{client["secret"]}"
+    else
+      styled_header("Client #{client["name"]}")
+      styled_hash(client)
+    end
+  end
+
   # clients:update [ID]
   #
   # create a new OAuth client
