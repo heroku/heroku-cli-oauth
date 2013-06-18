@@ -38,6 +38,28 @@ $ heroku clients
 Amazing  66c0743078a45bda1ace505a  https://amazing-client.herokuapp.com/auth/heroku/callback
 ```
 
+Show a client:
+
+``` bash
+$ heroku clients:show 66c0743078a45bda1ace505a
+=== Client Amazing
+id:           66c0743078a45bda1ace505a
+name:         Amazing
+redirect_uri: https://amazing-client.herokuapp.com/auth/heroku/callback
+secret:       3a791be75df30f2b87bd0a8aff1528ec2441d546407b71a2
+trusted:      false
+```
+
+Or use the `-s / --shell` option to pipe output straight to your `.env` file:
+
+``` bash
+$ heroku clients:show 66c0743078a45bda1ace505a -s >> .env
+$ cat .env
+...
+HEROKU_KEY=66c0743078a45bda1ace505a
+HEROKU_SECRET=3a791be75df30f2b87bd0a8aff1528ec2441d546407b71a2
+```
+
 Update clients:
 
 ``` bash
