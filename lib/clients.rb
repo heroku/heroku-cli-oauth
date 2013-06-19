@@ -1,6 +1,8 @@
 # manage OAuth clients on the platform
 #
 class Heroku::Command::Clients < Heroku::Command::Base
+  include Heroku::OAuth::Common
+
   # clients
   #
   # List clients under your account
@@ -8,7 +10,9 @@ class Heroku::Command::Clients < Heroku::Command::Base
   def index
     clients = json_decode(heroku.get("/oauth/clients"))
     styled_header("OAuth Clients")
-    styled_array(clients.map { |client| [client["name"], client["id"], client["redirect_uri"]] })
+    styled_array(clients.map { |client|
+      [client["name"], client["id"], client["redirect_uri"]]
+    })
   end
 
   # clients:create [NAME] [CALLBACK_URL]
