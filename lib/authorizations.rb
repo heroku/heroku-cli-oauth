@@ -8,7 +8,12 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   # List authorizations
   #
   def index
-    authorizations = json_decode(heroku.get("/oauth/authorizations", headers))
+    authorizations = api.request(
+      :expects => 200,
+      :headers => headers,
+      :method  => :get,
+      :path    => "/oauth/authorizations"
+    ).body
     styled_header("Authorizations")
     styled_array(authorizations.map { |auth|
       [auth["description"] || "", auth["id"], auth["scope"].join(", ")]
@@ -23,7 +28,13 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   # -s, --scope SCOPE             # set a custom OAuth scope
   #
   def create
-    token = json_decode(heroku.post("/oauth/authorizations", options, headers))
+    token = api.request(
+      :body    => encode_json(options),
+      :expects => 201,
+      :headers => headers,
+      :method  => :post,
+      :path    => "/oauth/authorizations"
+    ).body
     puts "Created OAuth authorization"
     puts "  ID:          #{token["id"]}"
     puts "  Description: #{token["description"]}"
@@ -37,7 +48,12 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   #
   def revoke
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: authorizations:revoke [ID] [options]")
-    auth = json_decode(heroku.delete("/oauth/authorizations/#{CGI.escape(id)}", headers))
-    puts "Revoked authorization from '#{auth["description"]}'"
+    authorization = api.request(
+      :expects => 200,
+      :headers => headers,
+      :method  => :delete,
+      :path    => "/oauth/authorizations/#{CGI.escape(id)}"
+    ).body
+    puts "Revoked authorization from '#{authorization["description"]}'"
   end
 end
