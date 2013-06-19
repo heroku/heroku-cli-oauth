@@ -8,12 +8,14 @@ class Heroku::Command::Clients < Heroku::Command::Base
   # List clients under your account
   #
   def index
-    clients = api.request(
-      :expects => 200,
-      :headers => headers,
-      :method  => :get,
-      :path    => "/oauth/clients"
-    ).body
+    clients = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :get,
+        :path    => "/oauth/clients"
+      ).body
+    end
     styled_header("OAuth Clients")
     styled_array(clients.map { |client|
       [client["name"], client["id"], client["redirect_uri"]]
@@ -35,14 +37,16 @@ class Heroku::Command::Clients < Heroku::Command::Base
     end
 
     validate!(url)
-    client = api.request(
-      :body    => encode_json(
-        { :name => name, :redirect_uri => url }),
-      :expects => 201,
-      :headers => headers,
-      :method  => :post,
-      :path    => "/oauth/clients"
-    ).body
+    client = request do
+      api.request(
+        :body    => encode_json(
+          { :name => name, :redirect_uri => url }),
+        :expects => 201,
+        :headers => headers,
+        :method  => :post,
+        :path    => "/oauth/clients"
+      ).body
+    end
 
     if options[:shell]
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
@@ -62,12 +66,14 @@ class Heroku::Command::Clients < Heroku::Command::Base
   def show
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:show [ID]")
 
-    client = api.request(
-      :expects => 200,
-      :headers => headers,
-      :method  => :get,
-      :path    => "/oauth/clients/#{CGI.escape(id)}"
-    ).body
+    client = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :get,
+        :path    => "/oauth/clients/#{CGI.escape(id)}"
+      ).body
+    end
 
     if options[:shell]
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
@@ -97,13 +103,15 @@ class Heroku::Command::Clients < Heroku::Command::Base
     shell = options.delete(:shell)
     options[:redirect_uri] = options.delete(:url)
 
-    client = api.request(
-      :body    => encode_json(options),
-      :expects => 200,
-      :headers => headers,
-      :method  => :patch,
-      :path    => "/oauth/clients/#{CGI.escape(id)}"
-    ).body
+    client = request do
+      api.request(
+        :body    => encode_json(options),
+        :expects => 200,
+        :headers => headers,
+        :method  => :patch,
+        :path    => "/oauth/clients/#{CGI.escape(id)}"
+      ).body
+    end
 
     if shell
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
@@ -120,12 +128,14 @@ class Heroku::Command::Clients < Heroku::Command::Base
   #
   def destroy
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:destroy [ID]")
-    client = api.request(
-      :expects => 200,
-      :headers => headers,
-      :method  => :delete,
-      :path    => "/oauth/clients/#{CGI.escape(id)}"
-    ).body
+    client = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :delete,
+        :path    => "/oauth/clients/#{CGI.escape(id)}"
+      ).body
+    end
     puts "Deleted client #{client["name"]}"
   end
 
@@ -134,10 +144,10 @@ class Heroku::Command::Clients < Heroku::Command::Base
   def validate!(url)
     uri = URI.parse(url)
     if insecure_url?(uri)
-      raise(Heroku::Command::CommandFailed, "Unsupported callback URL. Clients have to use HTTPS")
+      raise(Heroku::Command::CommandFailed, "Unsupported callback URL. Clients have to use HTTPS.")
     end
   rescue URI::InvalidURIError
-    raise(Heroku::Command::CommandFailed, "Invalid callback URL. Make sure it's a valid, HTTPS URL")
+    raise(Heroku::Command::CommandFailed, "Invalid callback URL. Make sure it's a valid, HTTPS URL.")
   end
 
   def insecure_url?(uri)

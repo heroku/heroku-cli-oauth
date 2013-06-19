@@ -8,12 +8,14 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   # List authorizations
   #
   def index
-    authorizations = api.request(
-      :expects => 200,
-      :headers => headers,
-      :method  => :get,
-      :path    => "/oauth/authorizations"
-    ).body
+    authorizations = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :get,
+        :path    => "/oauth/authorizations"
+      ).body
+    end
     styled_header("Authorizations")
     styled_array(authorizations.map { |auth|
       [auth["description"] || "", auth["id"], auth["scope"].join(", ")]
@@ -28,13 +30,15 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   # -s, --scope SCOPE             # set a custom OAuth scope
   #
   def create
-    token = api.request(
-      :body    => encode_json(options),
-      :expects => 201,
-      :headers => headers,
-      :method  => :post,
-      :path    => "/oauth/authorizations"
-    ).body
+    token = request do
+      api.request(
+        :body    => encode_json(options),
+        :expects => 201,
+        :headers => headers,
+        :method  => :post,
+        :path    => "/oauth/authorizations"
+      ).body
+    end
     puts "Created OAuth authorization"
     puts "  ID:          #{token["id"]}"
     puts "  Description: #{token["description"]}"
@@ -48,12 +52,14 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   #
   def revoke
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: authorizations:revoke [ID] [options]")
-    authorization = api.request(
-      :expects => 200,
-      :headers => headers,
-      :method  => :delete,
-      :path    => "/oauth/authorizations/#{CGI.escape(id)}"
-    ).body
+    authorization = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :delete,
+        :path    => "/oauth/authorizations/#{CGI.escape(id)}"
+      ).body
+    end
     puts "Revoked authorization from '#{authorization["description"]}'"
   end
 end
