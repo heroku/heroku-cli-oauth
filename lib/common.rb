@@ -10,7 +10,7 @@ module Heroku::OAuth
 
     def request
       yield
-    rescue Heroku::API::Errors::RequestFailed => e
+    rescue Heroku::API::Errors::RequestFailed, Heroku::API::Errors::ErrorWithResponse => e
       payload = Heroku::API::OkJson.decode(e.response.body)
       raise(Heroku::Command::CommandFailed, payload["message"])
     end
