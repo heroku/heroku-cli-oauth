@@ -14,10 +14,13 @@ To create a client:
 
 ``` bash
 $ heroku clients:create Amazing https://amazing-client.herokuapp.com/auth/heroku/callback
-
-Created client Amazing
-  ID:     66c0743078a45bda1ace505a
-  Secret: 3a791be75df30f2b87bd0a8aff1528ec2441d546407b71a2
+=== Created client 'Amazing'.
+created_at:   2013-06-20T22:04:01-00:00
+id:           3e304bda-d376-4278-bdea-6d6c08aa1359
+name:         Amazing
+redirect_uri: http://localhost:3000
+secret:       e6a5f58f-f8a9-49f1-a1a6-d1dd98930ef6
+updated_at:   2013-06-20T22:04:01-00:00
 ```
 
 Or use the `-s / --shell` option to pipe output straight to your `.env` file:
@@ -26,8 +29,8 @@ Or use the `-s / --shell` option to pipe output straight to your `.env` file:
 $ heroku clients:create -s Amazing https://amazing-client.herokuapp.com/auth/heroku/callback >> .env
 $ cat .env
 ...
-HEROKU_KEY=66c0743078a45bda1ace505a
-HEROKU_SECRET=3a791be75df30f2b87bd0a8aff1528ec2441d546407b71a2
+HEROKU_KEY=3e304bda-d376-4278-bdea-6d6c08aa1359
+HEROKU_SECRET=e6a5f58f-f8a9-49f1-a1a6-d1dd98930ef6
 ```
 
 See OAuth clients under your account with:
@@ -35,35 +38,36 @@ See OAuth clients under your account with:
 ``` bash
 $ heroku clients
 === OAuth Clients
-Amazing  66c0743078a45bda1ace505a  https://amazing-client.herokuapp.com/auth/heroku/callback
+Amazing  3e304bda-d376-4278-bdea-6d6c08aa1359  https://amazing-client.herokuapp.com/auth/heroku/callback
 ```
 
 Show a client:
 
 ``` bash
-$ heroku clients:show 66c0743078a45bda1ace505a
+$ heroku clients:show 3e304bda-d376-4278-bdea-6d6c08aa1359
 === Client Amazing
-id:           66c0743078a45bda1ace505a
+created_at:   2013-06-20T22:04:01-00:00
+id:           3e304bda-d376-4278-bdea-6d6c08aa1359
 name:         Amazing
-redirect_uri: https://amazing-client.herokuapp.com/auth/heroku/callback
-secret:       3a791be75df30f2b87bd0a8aff1528ec2441d546407b71a2
-trusted:      false
+redirect_uri: http://localhost:3000
+secret:       e6a5f58f-f8a9-49f1-a1a6-d1dd98930ef6
+updated_at:   2013-06-20T22:04:01-00:00
 ```
 
 Or use the `-s / --shell` option to pipe output straight to your `.env` file:
 
 ``` bash
-$ heroku clients:show 66c0743078a45bda1ace505a -s >> .env
+$ heroku clients:show 3e304bda-d376-4278-bdea-6d6c08aa1359 -s >> .env
 $ cat .env
 ...
-HEROKU_KEY=66c0743078a45bda1ace505a
-HEROKU_SECRET=3a791be75df30f2b87bd0a8aff1528ec2441d546407b71a2
+HEROKU_KEY=3e304bda-d376-4278-bdea-6d6c08aa1359
+HEROKU_SECRET=e6a5f58f-f8a9-49f1-a1a6-d1dd98930ef6
 ```
 
 Update clients:
 
 ``` bash
-$ heroku clients:update 66c0743078a45bda1ace505a --url https://amazing-client.herokuapp.com/auth/heroku/callback
+$ heroku clients:update 3e304bda-d376-4278-bdea-6d6c08aa1359 --url https://amazing-client.herokuapp.com/auth/heroku/callback
 Updated client Amazing
 ```
 
@@ -74,8 +78,8 @@ List them:
 ``` bash
 $ heroku authorizations
 === Authorizations
-authorization14@heroku.com  Amazing      all
-authorization15@heroku.com  Another App  read-only
+Amazing                        9e3a4063-b833-432e-ad75-4b0d7195be13  global
+Heroku CLI                     676cb46c-7597-4be1-8a6a-f87b9f2f1065  global
 ```
 
 #### Creating
@@ -85,10 +89,10 @@ You can create a special user-created authorization against your account that wi
 ``` bash
 $ heroku authorizations:create --description "For use with Anvil"
 Created OAuth authorization
-  ID:          authorization16@heroku.com
+  ID:          105a7bfa-34c3-476e-873a-b1ac3fdc12fb
   Description: For use with Anvil
   Token:       4cee516c-f8c6-4f14-9edf-fc6ef09cedc5
-  Scope:       all
+  Scope:       global
 ```
 
 The procured token can now be used like an API key:
@@ -97,29 +101,12 @@ The procured token can now be used like an API key:
 $ curl -u ":4cee516c-f8c6-4f14-9edf-fc6ef09cedc5" https://api.heroku.com/apps
 ```
 
-You can also create authorizations that have a more limited access scope (EXPERIMENTAL!):
-
-``` bash
-$ heroku authorizations:create --scope app:app2@heroku.com --description "Just for app2 access"
-Created OAuth authorization
-  ID:          authorization16@heroku.com
-  Description: Just for app2 access
-  Token:       b2a5b696-f0a0-4cb8-8184-27c319d8d9e3
-  Scope:       app2@heroku.com
-```
-
-Attempting to access anything other than app2 will result in an error:
-
-``` bash
-curl -u ":b2a5b696-f0a0-4cb8-8184-27c319d8d9e3" https://api.heroku.com/apps/1@heroku.com
-{"error":"The scope of this OAuth authorization does not allow access to this resource"}
-```
 
 #### Revoking
 
 Any authorization on your account can be revoked at any time:
 
 ``` bash
-$ heroku authorizations:revoke authorization15@heroku.com
+$ heroku authorizations:revoke 105a7bfa-34c3-476e-873a-b1ac3fdc12fb
 Revoked authorization from 'Another App'
 ```
