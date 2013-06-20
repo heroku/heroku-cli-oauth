@@ -52,7 +52,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
       puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Created client #{name}")
+      styled_header("Created client '#{name}'.")
       styled_hash(client)
     end
   end
@@ -79,7 +79,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
       puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Client #{client["name"]}")
+      styled_header("Client '#{client["name"]}'.")
       styled_hash(client)
     end
   end
@@ -117,7 +117,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
       puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Client #{client["name"]}")
+      styled_header("Client '#{client["name"]}'.")
       styled_hash(client)
     end
   end
@@ -136,7 +136,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
         :path    => "/oauth/clients/#{CGI.escape(id)}"
       ).body
     end
-    puts "Deleted client #{client["name"]}"
+    puts "Deleted client '#{client["name"]}'."
   end
 
   protected

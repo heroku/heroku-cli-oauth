@@ -39,7 +39,7 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
         :path    => "/oauth/authorizations"
       ).body
     end
-    puts "Created OAuth authorization"
+    puts "Created OAuth authorization."
     puts "  ID:          #{token["id"]}"
     puts "  Description: #{token["description"]}"
     puts "  Scope:       #{token["scope"].join(", ")}"
@@ -60,6 +60,6 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
         :path    => "/oauth/authorizations/#{CGI.escape(id)}"
       ).body
     end
-    puts "Revoked authorization from '#{authorization["description"]}'"
+    puts "Revoked authorization from '#{authorization["description"]}'."
   end
 end
