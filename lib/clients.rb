@@ -157,4 +157,9 @@ class Heroku::Command::Clients < Heroku::Command::Base
     return false if uri.host =~ /\A(10\.|192\.)/
     true
   end
+
+  def styled_hash(client)
+    client.delete("trusted")
+    super
+  end
 end
