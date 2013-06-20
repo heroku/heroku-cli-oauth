@@ -1,14 +1,25 @@
 # manage OAuth clients on the platform
 #
 class Heroku::Command::Clients < Heroku::Command::Base
+  include Heroku::OAuth::Common
+
   # clients
   #
   # List clients under your account
   #
   def index
-    clients = json_decode(heroku.get("/oauth/clients"))
+    clients = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :get,
+        :path    => "/oauth/clients"
+      ).body
+    end
     styled_header("OAuth Clients")
-    styled_array(clients.map { |client| [client["name"], client["id"], client["redirect_uri"]] })
+    styled_array(clients.map { |client|
+      [client["name"], client["id"], client["redirect_uri"]]
+    })
   end
 
   # clients:create [NAME] [CALLBACK_URL]
@@ -26,17 +37,22 @@ class Heroku::Command::Clients < Heroku::Command::Base
     end
 
     validate!(url)
-
-    raw = heroku.post("/oauth/clients",
-      { :name => name, :redirect_uri => url })
-    client = json_decode(raw)
+    client = request do
+      api.request(
+        :body    => encode_json(
+          { :name => name, :redirect_uri => url }),
+        :expects => 201,
+        :headers => headers,
+        :method  => :post,
+        :path    => "/oauth/clients"
+      ).body
+    end
 
     if options[:shell]
-      puts
-      puts "HEROKU_KEY=#{client["id"]}"
-      puts "HEROKU_SECRET=#{client["secret"]}"
+      puts "HEROKU_OAUTH_ID=#{client["id"]}"
+      puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Created client #{name}")
+      styled_header("Created client '#{name}'.")
       styled_hash(client)
     end
   end
@@ -50,19 +66,20 @@ class Heroku::Command::Clients < Heroku::Command::Base
   def show
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:show [ID]")
 
-    raw = api.request(
-      :expects => 200,
-      :method  => :get,
-      :path    => "/oauth/clients/#{id}")
-
-    client = raw.body
+    client = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :get,
+        :path    => "/oauth/clients/#{CGI.escape(id)}"
+      ).body
+    end
 
     if options[:shell]
-      puts
-      puts "HEROKU_KEY=#{client["id"]}"
-      puts "HEROKU_SECRET=#{client["secret"]}"
+      puts "HEROKU_OAUTH_ID=#{client["id"]}"
+      puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Client #{client["name"]}")
+      styled_header("Client '#{client["name"]}'.")
       styled_hash(client)
     end
   end
@@ -72,6 +89,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
   # create a new OAuth client
   #
   # -n, --name NAME  # change the client name
+  # -s, --shell      # output config vars in shell format
   #     --url  URL   # change the client redirect URL
   #
   def update
@@ -82,16 +100,26 @@ class Heroku::Command::Clients < Heroku::Command::Base
     end
 
     validate!(options[:url]) if options[:url]
+    shell = options.delete(:shell)
     options[:redirect_uri] = options.delete(:url)
 
-    raw = api.request(
-      :expects => 200,
-      :method  => :patch,
-      :path    => "/oauth/clients/#{id}",
-      :query   => options)
+    client = request do
+      api.request(
+        :body    => encode_json(options),
+        :expects => 200,
+        :headers => headers,
+        :method  => :patch,
+        :path    => "/oauth/clients/#{CGI.escape(id)}"
+      ).body
+    end
 
-    client = raw.body
-    puts "Updated client #{client["name"]}"
+    if shell
+      puts "HEROKU_OAUTH_ID=#{client["id"]}"
+      puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
+    else
+      styled_header("Client '#{client["name"]}'.")
+      styled_hash(client)
+    end
   end
 
   # clients:destroy [ID]
@@ -100,8 +128,15 @@ class Heroku::Command::Clients < Heroku::Command::Base
   #
   def destroy
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:destroy [ID]")
-    client = json_decode(heroku.delete("/oauth/clients/#{id}"))
-    puts "Deleted client #{client["name"]}"
+    client = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :delete,
+        :path    => "/oauth/clients/#{CGI.escape(id)}"
+      ).body
+    end
+    puts "Deleted client '#{client["name"]}'."
   end
 
   protected
@@ -109,10 +144,10 @@ class Heroku::Command::Clients < Heroku::Command::Base
   def validate!(url)
     uri = URI.parse(url)
     if insecure_url?(uri)
-      raise(Heroku::Command::CommandFailed, "Unsupported callback URL. Clients have to use HTTPS")
+      raise(Heroku::Command::CommandFailed, "Unsupported callback URL. Clients have to use HTTPS.")
     end
   rescue URI::InvalidURIError
-    raise(Heroku::Command::CommandFailed, "Invalid callback URL. Make sure it's a valid, HTTPS URL")
+    raise(Heroku::Command::CommandFailed, "Invalid callback URL. Make sure it's a valid, HTTPS URL.")
   end
 
   def insecure_url?(uri)
@@ -121,5 +156,10 @@ class Heroku::Command::Clients < Heroku::Command::Base
     return false if uri.host == "localhost"
     return false if uri.host =~ /\A(10\.|192\.)/
     true
+  end
+
+  def styled_hash(client)
+    client.delete("trusted")
+    super
   end
 end
