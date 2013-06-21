@@ -33,7 +33,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
     url  = shift_argument
 
     unless name && url
-      raise(Heroku::Command::CommandFailed, "Usage: clients:create [NAME] [CALLBACK_URL]")
+      raise(Heroku::Command::CommandFailed, "Usage: clients:register [NAME] [CALLBACK_URL]")
     end
 
     validate!(url)
@@ -52,10 +52,12 @@ class Heroku::Command::Clients < Heroku::Command::Base
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
       puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Created client '#{name}'.")
+      styled_header("Registered client '#{name}'.")
       styled_hash(client)
     end
   end
+
+  alias_command "clients:register", "clients:create"
 
   # clients:show [ID]
   #
@@ -83,6 +85,8 @@ class Heroku::Command::Clients < Heroku::Command::Base
       styled_hash(client)
     end
   end
+
+  alias_command "clients:info", "clients:show"
 
   # clients:update [ID]
   #
@@ -136,8 +140,10 @@ class Heroku::Command::Clients < Heroku::Command::Base
         :path    => "/oauth/clients/#{CGI.escape(id)}"
       ).body
     end
-    puts "Deleted client '#{client["name"]}'."
+    puts "Deregistered client '#{client["name"]}'."
   end
+
+  alias_command "clients:deregister", "clients:destroy"
 
   protected
 
