@@ -90,7 +90,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
 
   # clients:update [ID]
   #
-  # create a new OAuth client
+  # update OAuth client
   #
   # -n, --name NAME  # change the client name
   # -s, --shell      # output config vars in shell format
