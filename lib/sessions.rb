@@ -37,6 +37,6 @@ class Heroku::Command::Sessions < Heroku::Command::Base
         :path    => "/oauth/sessions/#{CGI.escape(id)}"
       ).body
     end
-    puts "Destroyed '#{session["description"]}'."
+    puts %{Destroyed "#{session["description"]}".}
   end
 end

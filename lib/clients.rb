@@ -52,7 +52,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
       puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Registered client '#{name}'.")
+      styled_header(%{Registered client "#{name}".})
       styled_hash(client)
     end
   end
@@ -81,7 +81,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
       puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Client '#{client["name"]}'.")
+      styled_header(%{Client "#{client["name"]}".})
       styled_hash(client)
     end
   end
@@ -121,7 +121,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
       puts "HEROKU_OAUTH_ID=#{client["id"]}"
       puts "HEROKU_OAUTH_SECRET=#{client["secret"]}"
     else
-      styled_header("Client '#{client["name"]}'.")
+      styled_header(%{Updated client "#{client["name"]}".})
       styled_hash(client)
     end
   end

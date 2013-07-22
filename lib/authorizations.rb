@@ -60,6 +60,6 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
         :path    => "/oauth/authorizations/#{CGI.escape(id)}"
       ).body
     end
-    puts "Revoked authorization from '#{authorization["description"]}'."
+    puts %{Revoked authorization from "#{authorization["description"]}".}
   end
 end
