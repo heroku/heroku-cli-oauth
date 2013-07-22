@@ -97,7 +97,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
   #     --url  URL   # change the client redirect URL
   #
   def update
-    id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:destroy [ID] [options]")
+    id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:update [ID] [options]")
 
     if options.empty?
       raise(Heroku::Command::CommandFailed, "Missing options")
