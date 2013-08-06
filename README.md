@@ -29,8 +29,8 @@ Or use the `-s / --shell` option to pipe output straight to your `.env` file:
 $ heroku clients:create -s Amazing https://amazing-client.herokuapp.com/auth/heroku/callback >> .env
 $ cat .env
 ...
-HEROKU_KEY=3e304bda-d376-4278-bdea-6d6c08aa1359
-HEROKU_SECRET=e6a5f58f-f8a9-49f1-a1a6-d1dd98930ef6
+HEROKU_OAUTH_ID=3e304bda-d376-4278-bdea-6d6c08aa1359
+HEROKU_OAUTH_SECRET=e6a5f58f-f8a9-49f1-a1a6-d1dd98930ef6
 ```
 
 See OAuth clients under your account with:
@@ -60,8 +60,8 @@ Or use the `-s / --shell` option to pipe output straight to your `.env` file:
 $ heroku clients:show 3e304bda-d376-4278-bdea-6d6c08aa1359 -s >> .env
 $ cat .env
 ...
-HEROKU_KEY=3e304bda-d376-4278-bdea-6d6c08aa1359
-HEROKU_SECRET=e6a5f58f-f8a9-49f1-a1a6-d1dd98930ef6
+HEROKU_OAUTH_ID=3e304bda-d376-4278-bdea-6d6c08aa1359
+HEROKU_OAUTH_SECRET=e6a5f58f-f8a9-49f1-a1a6-d1dd98930ef6
 ```
 
 Update clients:
