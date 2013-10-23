@@ -27,7 +27,7 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   # Create a new authorization giving access to your Heroku account
   #
   # -d, --description DESCRIPTION # set a custom authorization description
-  # -s, --scope SCOPE             # set a custom OAuth scope
+  # -s, --scope SCOPE             # set custom OAuth scopes
   #
   def create
     options[:scope] = options[:scope].split(",") if options[:scope]

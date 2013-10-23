@@ -101,6 +101,17 @@ Created OAuth authorization.
   Scope:       global
 ```
 
+Optionally, you can specify a list of scopes for the authorization:
+
+``` bash
+$ heroku authorizations:create --description "For use with Anvil" --scope identity,read-protected
+Created OAuth authorization.
+  ID:          105a7bfa-34c3-476e-873a-b1ac3fdc12fb
+  Description: For use with Anvil
+  Token:       4cee516c-f8c6-4f14-9edf-fc6ef09cedc5
+  Scope:       identity, read-protected
+```
+
 The procured token can now be used like an API key:
 
 ``` bash
