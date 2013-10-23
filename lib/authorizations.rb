@@ -30,6 +30,7 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   # -s, --scope SCOPE             # set a custom OAuth scope
   #
   def create
+    options[:scope] = options[:scope].split(",") if options[:scope]
     token = request do
       api.request(
         :body    => encode_json(options),
