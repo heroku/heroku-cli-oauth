@@ -5,7 +5,7 @@ Command line plugin for managing OAuth clients, authorizations and tokens.
 To install:
 
 ``` bash
-$ heroku plugins:install git@github.com:heroku/heroku-oauth.git
+$ heroku plugins:install https://github.com/heroku/heroku-oauth
 ```
 
 ### Clients
