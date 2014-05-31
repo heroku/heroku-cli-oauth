@@ -13,7 +13,7 @@ $ heroku plugins:install git@github.com:heroku/heroku-oauth.git
 To create a client:
 
 ``` bash
-$ heroku clients:register "Amazing" https://amazing-client.herokuapp.com/auth/heroku/callback
+$ heroku clients:create "Amazing" https://amazing-client.herokuapp.com/auth/heroku/callback
 === Registered client "Amazing".
 created_at:   2013-06-20T22:04:01-00:00
 id:           3e304bda-d376-4278-bdea-6d6c08aa1359
