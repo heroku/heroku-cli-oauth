@@ -1,6 +1,6 @@
 # Heroku OAuth
 
-Command line plugin giving you commands to manage OAuth clients, authorizations and tokens.
+Command line plugin for managing OAuth clients, authorizations and tokens.
 
 To install:
 
