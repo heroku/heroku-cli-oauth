@@ -59,7 +59,7 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   def update
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: authorizations:update [ID] [options]")
     params = {
-      options[:client_id] ?
+      client: options[:client_id] ?
         { id: options[:client_id], secret: options[:client_secret] } :
         nil,
       description: options[:description]
