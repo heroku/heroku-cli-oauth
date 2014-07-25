@@ -58,15 +58,18 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   #
   def update
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: authorizations:update [ID] [options]")
-    params = {
-      client: options[:client_id] ?
-        { id: options[:client_id], secret: options[:client_secret] } :
+    payload = {
+      "client" => options[:client_id] ?
+        {
+          "id"     => options[:client_id],
+          "secret" => options[:client_secret]
+        } :
         nil,
-      description: options[:description]
+      "description" => options[:description]
     }
     token = request do
       api.request(
-        :body    => encode_json(options),
+        :body    => encode_json(payload),
         :expects => 200,
         :headers => headers,
         :method  => :patch,
