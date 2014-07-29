@@ -160,6 +160,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
     return false if uri.scheme == "https"
     # allow localhost, 10.* and 192.* clients for testing
     return false if uri.host == "localhost"
+    return false if uri.host =~ /\.local\z/
     return false if uri.host =~ /\A(10\.|192\.)/
     true
   end
