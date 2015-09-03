@@ -44,11 +44,25 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
       ).body
     end
     puts "Created OAuth authorization."
-    puts "  Client:      #{token["client"] ? token["client"]["name"] : "<none>"}"
-    puts "  ID:          #{token["id"]}"
-    puts "  Description: #{token["description"]}"
-    puts "  Scope:       #{token["scope"].join(", ")}"
-    puts "  Token:       #{token["access_token"]["token"]}"
+    show_authorization(token)
+  end
+
+  # authorizations:info
+  #
+  # Shows an existing authorization that gives access to your Heroku account
+  #
+  def info
+    id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: authorizations:update [ID] [options]")
+    token = request do
+      api.request(
+        :expects => 200,
+        :headers => headers,
+        :method  => :get,
+        :path    => "/oauth/authorizations/#{CGI.escape(id)}"
+      ).body
+    end
+    puts "Showing OAuth authorization."
+    show_authorization(token)
   end
 
   # authorizations:update
@@ -80,11 +94,7 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
       ).body
     end
     puts "Updated OAuth authorization."
-    puts "  Client:      #{token["client"] ? token["client"]["name"] : "<none>"}"
-    puts "  ID:          #{token["id"]}"
-    puts "  Description: #{token["description"]}"
-    puts "  Scope:       #{token["scope"].join(", ")}"
-    puts "  Token:       #{token["access_token"]["token"]}"
+    show_authorization(token)
   end
 
   # authorizations:revoke [ID]
@@ -102,5 +112,15 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
       ).body
     end
     puts %{Revoked authorization from "#{authorization["description"]}".}
+  end
+
+  private
+
+  def show_authorization(authorization)
+    puts "  Client:      #{authorization["client"] ? authorization["client"]["name"] : "<none>"}"
+    puts "  ID:          #{authorization["id"]}"
+    puts "  Description: #{authorization["description"]}"
+    puts "  Scope:       #{authorization["scope"].join(", ")}"
+    puts "  Token:       #{authorization["access_token"]["token"]}"
   end
 end
