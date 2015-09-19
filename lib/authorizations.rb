@@ -28,11 +28,13 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   #
   # -d, --description DESCRIPTION # set a custom authorization description
   # -s, --scope SCOPE             # set custom OAuth scopes
+  # -e, --expires_in SECONDS      # set expiration in seconds
   #
   def create
     payload = {
       "description" => options[:description],
       "scope"       => options[:scope] ? options[:scope].split(",") : nil,
+      "expires_in" => options[:expires_in]
     }
     token = request do
       api.request(
