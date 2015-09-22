@@ -3,6 +3,8 @@
 class Heroku::Command::Authorizations < Heroku::Command::Base
   include Heroku::OAuth::Common
 
+  DEFAULT_OUTPUT_FORMAT = 'long'
+
   # authorizations
   #
   # List authorizations
@@ -29,6 +31,7 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
   # -d, --description DESCRIPTION # set a custom authorization description
   # -s, --scope SCOPE             # set custom OAuth scopes
   # -e, --expires_in SECONDS      # set expiration in seconds
+  # -f, --output_format FORMAT    # output format of the oauth information.  A value of short only outputs the token.
   #
   def create
     payload = {
@@ -45,8 +48,9 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
         :path    => "/oauth/authorizations"
       ).body
     end
-    puts "Created OAuth authorization."
-    show_authorization(token)
+    output_format = options[:output_format] || DEFAULT_OUTPUT_FORMAT
+    puts "Created OAuth authorization." unless output_format == 'short'
+    show_authorization(token, output_format: output_format)
   end
 
   # authorizations:info
@@ -79,11 +83,11 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: authorizations:update [ID] [options]")
     payload = {
       "client" => options[:client_id] ?
-        {
-          "id"     => options[:client_id],
-          "secret" => options[:client_secret]
-        } :
-        nil,
+      {
+        "id"     => options[:client_id],
+        "secret" => options[:client_secret]
+      } :
+      nil,
       "description" => options[:description]
     }
     token = request do
@@ -118,11 +122,16 @@ class Heroku::Command::Authorizations < Heroku::Command::Base
 
   private
 
-  def show_authorization(authorization)
-    puts "  Client:      #{authorization["client"] ? authorization["client"]["name"] : "<none>"}"
-    puts "  ID:          #{authorization["id"]}"
-    puts "  Description: #{authorization["description"]}"
-    puts "  Scope:       #{authorization["scope"].join(", ")}"
-    puts "  Token:       #{authorization["access_token"]["token"]}"
+  def show_authorization(authorization, options = {})
+    output_format = options[:output_format] || DEFAULT_OUTPUT_FORMAT
+    if output_format ==  DEFAULT_OUTPUT_FORMAT
+      puts "  Client:      #{authorization["client"] ? authorization["client"]["name"] : "<none>"}"
+      puts "  ID:          #{authorization["id"]}"
+      puts "  Description: #{authorization["description"]}"
+      puts "  Scope:       #{authorization["scope"].join(", ")}"
+      puts "  Token:       #{authorization["access_token"]["token"]}"
+    else
+      puts authorization["access_token"]["token"]
+    end
   end
 end
