@@ -64,16 +64,22 @@ class Heroku::Command::Clients < Heroku::Command::Base
   # show details for an OAuth client
   #
   # -s, --shell # output config vars in shell format
+  # -x, --extended  # Show extended information
   #
   def show
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:show [ID]")
+
+    path = "/oauth/clients/#{CGI.escape(id)}"
+    if options[:extended]
+      path += '?extended=true'
+    end
 
     client = request do
       api.request(
         :expects => 200,
         :headers => headers,
         :method  => :get,
-        :path    => "/oauth/clients/#{CGI.escape(id)}"
+        :path    => path
       ).body
     end
 
