@@ -64,7 +64,7 @@ class Heroku::Command::Clients < Heroku::Command::Base
   # show details for an OAuth client
   #
   # -s, --shell # output config vars in shell format
-  # -x, --extended  # Show extended information
+  # -x, --extended  # show extended information
   #
   def show
     id = shift_argument || raise(Heroku::Command::CommandFailed, "Usage: clients:show [ID]")
