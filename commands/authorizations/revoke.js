@@ -17,5 +17,10 @@ module.exports = {
   description: 'revoke OAuth authorization',
   needsAuth: true,
   args: [{name: 'id'}],
-  run: cli.command(co.wrap(run))
+  run: cli.command(co.wrap(run)),
+  help: `Example:
+
+    $  heroku authorizations:revoke c896-8e45-d7-0abf08-3edc5f47bf15b038
+    Revoking OAuth Authorization... 
+    done, revoked authorization from Long-lived user authorization`
 }

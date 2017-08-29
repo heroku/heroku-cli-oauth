@@ -22,5 +22,14 @@ module.exports = {
     {name: 'json', description: 'output in json format'}
   ],
   args: [{name: 'id'}],
-  run: cli.command(co.wrap(run))
+  run: cli.command(co.wrap(run)),
+  help: `Example:
+
+    $ heroku authorizations:info c896-8e45-d7-0abf08-3edc5f47bf15b038
+    Client:      <none>
+    ID:          c896-8e45-d7-0abf08-3edc5f47bf15b038
+    Description: Long-lived user authorization
+    Scope:       global
+    Token:       61ffc98c4151-19-7-34e8914c7b7fb-d8b1`
+
 }
