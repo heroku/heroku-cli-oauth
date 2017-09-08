@@ -18,5 +18,9 @@ module.exports = {
   description: 'delete client by ID',
   needsAuth: true,
   args: [{name: 'id'}],
-  run: cli.command(co.wrap(run))
+  run: cli.command(co.wrap(run)),
+  help: `Example:
+
+    $ heroku clients:destroy DEVAUTH
+    Destroying DEVAUTH... done`
 }
