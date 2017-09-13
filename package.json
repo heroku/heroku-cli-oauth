@@ -7,6 +7,7 @@
     "url": "https://github.com/heroku/heroku-cli-oauth/issues"
   },
   "dependencies": {
+    "cli-engine-heroku": "^4.1.0",
     "co": "^4.6.0",
     "heroku-cli-util": "^6.2.0",
     "lodash": "^4.17.4"
