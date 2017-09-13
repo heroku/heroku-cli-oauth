@@ -3,7 +3,6 @@
 const co = require('co')
 const cli = require('heroku-cli-util')
 const authorizations = require('../../lib/authorizations')
-const {ScopeCompletion} = require('cli-engine-heroku/lib/completions');
 
 function * run (context, heroku) {
   let promise = heroku.request({
@@ -28,6 +27,13 @@ function * run (context, heroku) {
     cli.styledJSON(auth)
   } else {
     authorizations.display(auth)
+  }
+}
+
+const ScopeCompletion = {
+  skipCache: true,
+  options: (ctx) => {
+    return ['global', 'identity', 'read', 'write', 'read-protected', 'write-protected']
   }
 }
 
