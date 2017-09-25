@@ -37,5 +37,8 @@ module.exports = {
     {name: 'url', hasValue: true, description: 'change the client redirect URL'}
   ],
   needsAuth: true,
-  run: cli.command(co.wrap(run))
+  run: cli.command(co.wrap(run)),
+  help: `Example:
+
+  $ heroku clients:update DEVAUTH -n NEW_DEVAUTH` 
 }

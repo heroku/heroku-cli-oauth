@@ -26,5 +26,8 @@ module.exports = {
     {name: 'json', description: 'output in json format'},
     {name: 'shell', char: 's', description: 'output in shell format'}
   ],
-  run: cli.command(co.wrap(run))
+  run: cli.command(co.wrap(run)),
+  help: `Example:
+
+    $ heroku clients:info DEVAUTH`
 }

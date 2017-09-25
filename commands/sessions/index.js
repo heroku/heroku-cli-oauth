@@ -30,5 +30,14 @@ module.exports = {
   flags: [
     {name: 'json', description: 'output in json format'}
   ],
-  run: cli.command(co.wrap(run))
+  run: cli.command(co.wrap(run)),
+  help: `Example:
+
+   $ heroku sessions
+    Session @ 12.34.56.789 e4-c4f6b98d0d-57ca40279ef36c4-d-310
+    Session @ 12.34.56.789 e4-c4f6b98d0d-57ca40279ef36c4-d-312
+    Session @ 12.34.56.789 e4-c4f6b98d0d-57ca40279ef36c4-d-313
+    Session @ 12.34.56.789 e4-c4f6b98d0d-57ca40279ef36c4-d-314
+    Session @ 12.34.56.789 e4-c4f6b98d0d-57ca40279ef36c4-d-319
+    Session @ 12.34.56.789 e4-c4f6b98d0d-57ca40279ef36c4-d-311`
 }
